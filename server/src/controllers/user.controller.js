@@ -1,18 +1,25 @@
 import mongoose from "mongoose";
 import { User } from "../models/user.model.js";
+import jwt from "jsonwebtoken"
 
 const generateAccessAndRefereshTokens = async (userId) => {
-    const user = await User.findById(userId)
+    try {
+        const user = await User.findById(userId)
+        
+        const accessToken = user.generateAccessToken()
+        const refreshToken = user.generateRefreshToken()
+        
 
-    const accessToken = user.generateAccessToken()
-    const refreshToken = user.generateRefreshToken()
+        user.refreshToken = refreshToken
+        await user.save({ validateBeforeSave: false})
+        
 
-    user.refreshToken = refreshToken
-    await user.save({ validateBeforeSave: false})
+        return { accessToken, refreshToken }
 
-    return {
-        accessToken,
-        refreshToken
+    } catch (error) {
+        return res.status(500).json({
+            "error": "Something went wrong while generating referesh and access token"
+        })
     }
 }
 
@@ -98,7 +105,7 @@ const loginUser = async (req, res) => {
             "error": "User Does'nt Exist"
         })
     }
-    console.log(user)
+    // console.log(user)
     const isPasswordValid = await user.isPasswordCorrect(password)
 
     if(!isPasswordValid) {
@@ -106,13 +113,16 @@ const loginUser = async (req, res) => {
             "error": "Password is not Correct"
         })
     }
-    const { accessToken, refreshToken } = generateAccessAndRefereshTokens(user._id)
+    const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(user._id)
+    console.log("accessToken ---> ", accessToken)
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
 
     const options = {
         httpOnly: true,
-        secure: true
+        secure: false,
+        expires: new Date(Date.now() + 1 * 60 * 1000)
     }
+    
     return res
     .status(200)
     .cookie("accessToken", accessToken, options)
@@ -127,10 +137,84 @@ const loginUser = async (req, res) => {
 }
 
 const logoutUser = async (req, res) => {
-    
+    await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set: {
+                refreshToken: undefined
+            }
+        },
+        {
+            new: true
+        }
+    )
+
+    const options = {
+        httpOnly: true,
+        secure: false
+    }
+
+    return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json({
+        "Logout": "User logged Out"
+    })
 }
 
+const refreshAccessToken = async (req, res) => {
+    // get the incoming refresh Token
+    // validate token - if not empty
+    // decodedToken = jwt.verify -> incomingRefreshToken
+    // user = findById -> decodedToken
+    // validate user - check if not empty
+    // compare incomingRefreshToken and the token in out DB
+    // generate new Access nd Refresh Token
+    // return -> Cookie nd Tokens
+
+    const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
+
+    if (!incomingRefreshToken) {
+        return res.status(401).send("Unauthorized request")
+    }
+
+    try {
+        const decodedToken = jwt.verify(incomingRefreshToken, process.env.ACCESS_TOKEN_SECRET)
+
+        const user = await User.findById(decodedToken._id)
+
+        if (!user) {
+            return res.status(401).send("Invalid refresh token")
+        }
+
+        if (incomingRefreshToken !== user?.refreshToken) {
+            return res.status(401).send("Refresh token is expired or used")
+        }
+
+        const {accessToken, refreshToken} = generateAccessAndRefereshTokens(user._id)
+
+        const options = {
+            httpOnly: true,
+            secure: false // just for thunderclient
+        }
+        return res
+        .status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json(
+            accessToken,
+            refreshToken
+        )
+    } catch (error) {
+        return res.status(401).send("Invalid Refresh Token")
+    }
+}
 export {
     registerUser,
     loginUser,
+    logoutUser,
+    refreshAccessToken
 }
+
+
