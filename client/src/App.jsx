@@ -1,16 +1,11 @@
 import React from 'react';
-import { Navbar, Login } from './components/index.js';
-import Name from './components/Name.jsx';
-import Signup from './components/Signup.jsx';
+import { Outlet } from 'react-router-dom';
+import Navbar from './components/Header/Navbar'
 const App = () => {
   return (
     <>
       <Navbar />
-      <div className="flex justify-around">
-        <Login />
-        <Signup />
-      </div>
-      <Name />
+      <Outlet />
     </>
   );
 };

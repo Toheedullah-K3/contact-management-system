@@ -28,8 +28,9 @@ const Login = () => {
             if (response.status === 200) {
 
                 dispatch(loginAction({userData}))
-
             }
+
+            navigate("/")
         } catch (error) {
             console.log("Error --> ", error)
             setError(error.response.data.error || "An unexpected error occurred.");

@@ -2,7 +2,7 @@ import React from 'react';
 import { LogoutBtn, Container } from '../index.js'
 import '../../assets/styles/style.css';
 import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 
 const Navbar = () => {
@@ -11,6 +11,11 @@ const Navbar = () => {
     const navigate = useNavigate()
 
     const navItems = [
+        {
+            name: "Home",
+            slug: "/",
+            active: true
+        },
         {
             name: "Login",
             slug: "/login",
@@ -34,32 +39,41 @@ const Navbar = () => {
     ]
 
     return (
-      <nav className="navbar">
-        <div className="navbar-container">
-            <div className="navbar-logo">
-                ContactHub
-            </div>
+        <nav className="bg-white shadow-md py-4">
+  <div className="container mx-auto flex justify-between items-center px-6">
+    <div className="text-5xl font-extrabold text-blue-500">
+      ContactHub
+    </div>
 
-            <ul className='menu-items'>
-                {
-                    navItems.map(item => ( 
-                        item.active && (
-                            <li key={item.name} className='menu-item'>
-                                {item.name}
-                            </li>
-                        )
-                    ))
-                }
-                {
-                    authStatus && (
-                        <LogoutBtn />
-                    )
-                }
-            </ul>
+    <ul className="flex space-x-8 items-center">
+      {
+        navItems.map(item => (
+          item.active && (
+            <li key={item.name} className="relative group">
+              <NavLink 
+                to={item.slug} 
+                className="text-gray-800 text-lg font-medium flex items-center group-hover:text-gray-600 transition duration-300"
+              >
+                {item.name}
+                {/* Bottom Border Effect */}
+                <span className="absolute left-0 bottom-0 w-0 h-1 bg-blue-500 transition-all duration-300 group-hover:w-full"></span>
+              </NavLink>
+            </li>
+          )
+        ))
+      }
+      {
+        authStatus && (
+          <li>
+            <LogoutBtn />
+          </li>
+        )
+      }
+    </ul>
+  </div>
+</nav>
 
-        </div>
-        
-      </nav>
+      
     );
   };
 
