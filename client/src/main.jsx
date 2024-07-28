@@ -11,7 +11,7 @@ import store, { persistor } from './store/store.js'
 import Home from './pages/Home.jsx'
 import Login from './pages/Login.jsx'
 import Signup from './pages/Signup.jsx'
-
+import AddContact from './pages/AddContact.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,6 +19,7 @@ const router = createBrowserRouter(
       <Route path='' element= {<Home />}/>
       <Route path='login' element= {<Login />}/>
       <Route path='signup' element= {<Signup />}/>
+      <Route path='add-contact' element= {<AddContact />}/>
     </Route>
   )
 )

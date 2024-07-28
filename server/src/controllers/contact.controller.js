@@ -1,7 +1,6 @@
 import { Contact } from "../models/contact.model.js";
 
 const addContact = async (req, res) => {
-    console.log("I am Entered")
     // get Contact Details from User
     // Validate if not empty
     // check if contact is already added - by Contact Number
@@ -44,6 +43,19 @@ const addContact = async (req, res) => {
     }
 }
 
+const getAllContacts = async(req, res) => {
+    try {
+        console.log("getAllContacts is runned")
+        const contacts = await Contact.find({}) 
+        return res.status(200).json({
+            contacts
+        })
+    } catch (error) {
+        return res.status(500).send("Server Error Fetching Contacts")
+    }
+}
+
 export {
-    addContact
+    addContact,
+    getAllContacts
 }
