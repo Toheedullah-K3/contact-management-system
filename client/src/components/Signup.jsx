@@ -3,8 +3,11 @@ import { Input, Button } from './index.js'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
-
+import { useNavigate } from 'react-router-dom'
 const Signup = () => {
+
+    const navigate = useNavigate()
+
     const [error, setError] = useState("")
     const { register, handleSubmit } = useForm()
 
@@ -15,6 +18,8 @@ const Signup = () => {
             const response = await axios.post(`${apiUrl}/user/register`, data)
 
             console.log(response.data)
+
+            navigate('/login')
         } catch (error) {
             setError(error.response.data.error || "An unexpected error occurred.")
         }
