@@ -9,23 +9,21 @@ const contactSchema = new Schema(
         },
         email: {
             type: String,
-            required: true,
             trim: true
         },
         phone: {
             type: String,
             required: true,
-            trim: true
+            trim: true,
+            unique: true
         },
         address: {
             type: String,
-            required: true,
             trim: true
         },
         relationShip: {
             type: String,
             enum: ['Friend', 'Family', 'Colleague', 'Other'],
-            required: true,
             trim: true
         },
         company: {
@@ -38,8 +36,8 @@ const contactSchema = new Schema(
         isFavorite: {
             type: Boolean,
             default: false
-        },
-        SocialMedia: {
+        }, 
+        socialMedia: {
             facebook: {type: String, trim: true},
             instagram: {type: String, trim: true},
             linkedIn: {type: String, trim: true},
