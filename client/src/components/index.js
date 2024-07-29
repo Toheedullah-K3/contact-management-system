@@ -6,6 +6,7 @@ import Input from "./Input";
 import Login from "./Login";
 import Signup from "./Signup";
 import ContactForm from "./ContactForm";
+import Select from "./Select";
 
 export {
     Navbar,
@@ -15,5 +16,6 @@ export {
     Input,
     Login,
     Signup,
-    ContactForm
+    ContactForm,
+    Select
 }
