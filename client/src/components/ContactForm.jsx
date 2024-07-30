@@ -1,9 +1,28 @@
 import React from 'react';
 import { Select, Input, Button } from './index.js';
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
 
 const ContactForm = () => {
   const { register, handleSubmit } = useForm();
+
+  const apiUrl = import.meta.env.VITE_API_URL;
+
+  const addContact = async (data) => {
+    try {
+        const response = await axios.post(`${apiUrl}/contact/addContact`, data, {
+            withCredentials: true
+        })
+
+        const { contact } = response.data
+
+        return res.send(200).json({
+            contact
+        })
+    } catch (error) {
+        return res.status(500).send("Server Error, Adding Contact!!")
+    }
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 via-purple-50 to-blue-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -11,6 +30,8 @@ const ContactForm = () => {
         <div className="w-full md:w-1/2 p-4 space-y-8">
           <h2 className="text-3xl font-extrabold text-gray-900 text-center">Add a New Contact</h2>
           <p className="text-sm text-gray-600 text-center">Fill in the details to add a new contact to your list.</p>
+
+
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 gap-y-6">
               <Input
@@ -60,7 +81,7 @@ const ContactForm = () => {
                 type="submit"
                 className="w-full py-3 px-6 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                Save Contact
+                Add Contact
               </Button>
             </div>
           </form>
@@ -76,15 +97,6 @@ const ContactForm = () => {
               className="w-32 h-32 object-cover mx-auto rounded-lg shadow-md"
             />
             <div className="mt-6">
-              {/* <div className="flex items-center justify-center">
-                <Input
-                  type="checkbox"
-                  label="Is Favourite"
-                  className="appearance-none rounded-lg border border-gray-300 p-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  {...register("isFavourite")}
-                />
-                <span className="ml-2 text-gray-600">Is Favourite</span>
-              </div> */}
 
 
 

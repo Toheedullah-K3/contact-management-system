@@ -22,8 +22,6 @@ const Login = () => {
                 withCredentials: true
             })
             const { user } = response.data;
-            const userData = user.username
-
 
             if (response.status === 200) {
 

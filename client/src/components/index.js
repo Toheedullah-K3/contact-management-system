@@ -7,6 +7,7 @@ import Login from "./Login";
 import Signup from "./Signup";
 import ContactForm from "./ContactForm";
 import Select from "./Select";
+import ContactCard from "./ContactCard";
 
 export {
     Navbar,
@@ -17,5 +18,6 @@ export {
     Login,
     Signup,
     ContactForm,
-    Select
+    Select,
+    ContactCard
 }

@@ -12,6 +12,7 @@ import Home from './pages/Home.jsx'
 import Login from './pages/Login.jsx'
 import Signup from './pages/Signup.jsx'
 import AddContact from './pages/AddContact.jsx'
+import AllContact from './pages/AllContacts.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,6 +21,7 @@ const router = createBrowserRouter(
       <Route path='login' element= {<Login />}/>
       <Route path='signup' element= {<Signup />}/>
       <Route path='add-contact' element= {<AddContact />}/>
+      <Route path='all-contacts' element= {<AllContact />}/>
     </Route>
   )
 )
