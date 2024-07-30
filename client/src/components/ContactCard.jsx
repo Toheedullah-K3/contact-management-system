@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaHeart } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-
+import { Button } from './index.js'
 const ContactCard = ({ viewMode = 'grid', contactData }) => {
     const defaultAvatar = 'https://i.imgur.com/6VBx3io.png';
     const navigate = useNavigate();
@@ -9,6 +9,10 @@ const ContactCard = ({ viewMode = 'grid', contactData }) => {
     const handleCardClick = (contact) => {
         navigate(`/person/${contact._id}`, { state: { contact } });
     };
+
+    const handleEditClicked = (contact) => {
+        navigate(`/edit-contact/${contact._id}`, {state: {contact}})
+    }
 
     return (
         <div>
@@ -22,6 +26,11 @@ const ContactCard = ({ viewMode = 'grid', contactData }) => {
                             <div className="absolute top-4 right-4 text-gray-500">
                                 {contact.isFavourite && <FaHeart className="text-red-500 text-lg" />}
                             </div>
+                            <Button
+                                onClick= {() => handleEditClicked(contact)}
+                            >
+                                Edit
+                            </Button>
                             <div className="flex flex-col items-center">
                                 <div className="bg-gray-200 p-3 rounded-full mb-4">
                                     <img

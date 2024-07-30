@@ -45,7 +45,6 @@ const addContact = async (req, res) => {
 
 const getAllContacts = async(req, res) => {
     try {
-        console.log("getAllContacts is runned")
         const contacts = await Contact.find({}) 
         return res.status(200).json({
             contacts
@@ -56,11 +55,43 @@ const getAllContacts = async(req, res) => {
 }
 
 const getContact = async (req, res) => {
-    return res.send(200).send("Okay")
+    try {
+        const { id } = req.params
+        const contact = await Contact.findById(id)
+        if (!contact) {
+            return res.status(404).send("Contact Not Found");
+        }
+        return res.status(200).json({
+            contact
+        })
+    } catch (error) {
+        return res.status(500).send("Server Error Fetching Contact Details")
+    }
 }
 
+const editContact = async (req, res) => {
+    const {name, email, phone, address, relationShip, company, notes, isFavorite, socialMedia} = req.body
+    try {
+        const { id } = req.params
+        Contact.findByIdAndUpdate(
+            id, 
+            {
+                $set: {
+                    name, email, phone, 
+                    address, relationShip, 
+                    company, notes, isFavorite, 
+                    socialMedia
+                }
+            },
+            { new: true }
+        )
+    } catch (error) {
+        return res.status(500).send("Server Error Editing Contact Details")
+    }
+}
 export {
     addContact,
     getAllContacts,
-    getContact
+    getContact,
+    editContact
 }
