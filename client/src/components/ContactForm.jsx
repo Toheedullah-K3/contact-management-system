@@ -2,25 +2,34 @@ import React from 'react';
 import { Select, Input, Button } from './index.js';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
-
+import { useNavigate } from 'react-router-dom';
 const ContactForm = () => {
   const { register, handleSubmit } = useForm();
-
+  const navigate = useNavigate()
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const addContact = async (data) => {
     try {
-        const response = await axios.post(`${apiUrl}/contact/addContact`, data, {
+      console.log("Runned")
+      console.log(data)
+
+        const response = await axios.post(`${apiUrl}/contact/addContact`, {
+          ...data,
+          socialMedia: {
+            facebook: data.facebook,
+            github: data.github,
+            linkedIn: data.linkedIn
+          }
+        }, {
             withCredentials: true
         })
 
         const { contact } = response.data
 
-        return res.send(200).json({
-            contact
-        })
+        navigate('/all-contacts')
+        return contact
     } catch (error) {
-        return res.status(500).send("Server Error, Adding Contact!!")
+        console.log("Server Error, Adding Contact!!")
     }
   }
 
@@ -32,7 +41,7 @@ const ContactForm = () => {
           <p className="text-sm text-gray-600 text-center">Fill in the details to add a new contact to your list.</p>
 
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit(addContact)} className="space-y-6">
             <div className="grid grid-cols-1 gap-y-6">
               <Input
                 type="text"
@@ -61,7 +70,7 @@ const ContactForm = () => {
               <Select
                 options={["Friend", "Family", "Colleague", "Other"]}
                 className="appearance-none rounded-lg border border-gray-300 p-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                {...register("category")}
+                {...register("relationShip")}
               />
               <Input
                 type="text"
@@ -118,7 +127,7 @@ const ContactForm = () => {
                   type="text"
                   placeholder="LinkedIn"
                   className="appearance-none rounded-lg border border-gray-300 p-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mt-2"
-                  {...register("linkedin")}
+                  {...register("linkedIn")}
                 />
               </div>
             </div>

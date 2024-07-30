@@ -1,28 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FaTh, FaList } from 'react-icons/fa';
-import { ContactCard } from '../components/index'
+import ContactCard from '../components/ContactCard'; 
+import { Link } from 'react-router-dom';
 
+const apiUrl = import.meta.env.VITE_API_URL;
 
-const getContacts = async (setContacts) => {
-  try {
-    const apiUrl = import.meta.env.VITE_API_URL;
+const fetchContacts = async () => {
+  try { 
     const response = await axios.get(`${apiUrl}/contact/getAllContacts`);
-    const { contacts } = response.data;
-    setContacts(contacts);
+    return response.data.contacts;
   } catch (error) {
     console.error('Error fetching contacts:', error);
+    throw error; 
   }
 };
 
 const ContactsPage = () => {
   const [contacts, setContacts] = useState([]);
-  const [editMode, setEditMode] = useState(false)
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    getContacts(setContacts);
+    const loadContacts = async () => {
+      try {
+        const contactsData = await fetchContacts();
+        setContacts(contactsData.reverse());
+        console.log(contactsData)
+      } catch (error) {
+        setError('Failed to fetch contacts');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadContacts();
   }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-100 via-purple-50 to-blue-100 p-8">
@@ -46,8 +63,8 @@ const ContactsPage = () => {
         </div>
         
         <ContactCard 
-          viewMode= {viewMode}
-          contactData = {contacts}
+          viewMode={viewMode}
+          contactData={contacts}
         />
       </div>
     </div>

@@ -23,7 +23,8 @@ const contactSchema = new Schema(
         },
         relationShip: {
             type: String,
-            enum: ['Friend', 'Family', 'Colleague', 'Other'],
+            // enum: ['Friend', 'Family', 'Colleague', 'Other'],
+            default: "Dost",
             trim: true
         },
         company: {

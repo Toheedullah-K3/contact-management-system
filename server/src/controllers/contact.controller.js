@@ -8,7 +8,7 @@ const addContact = async (req, res) => {
     // check for contact creation
     // return res
      
-    const {name, email, phone, address, relationship, company, notes, isFavorite, socialMedia} = req.body
+    const {name, email, phone, address, relationShip, company, notes, isFavorite, socialMedia} = req.body
 
     if (
         [name, phone].some((field) => field?.trim() === "")
@@ -26,7 +26,7 @@ const addContact = async (req, res) => {
     try {
         const contact = await Contact.create({
             name, email, phone, 
-            address, relationship,
+            address, relationShip,
             company, notes, isFavorite, 
             socialMedia
         })
@@ -55,7 +55,12 @@ const getAllContacts = async(req, res) => {
     }
 }
 
+const getContact = async (req, res) => {
+    return res.send(200).send("Okay")
+}
+
 export {
     addContact,
-    getAllContacts
+    getAllContacts,
+    getContact
 }
