@@ -43,6 +43,10 @@ const contactSchema = new Schema(
             instagram: {type: String, trim: true},
             linkedIn: {type: String, trim: true},
             github: {type: String, trim: true}
+        },
+        userId: {
+            type: Schema.Types.ObjectId,
+            ref: "User"
         }
     },
     {

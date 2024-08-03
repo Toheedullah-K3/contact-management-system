@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const ContactForm = ({ contact }) => {
+const ContactForm = ( {contact} ) => {
 
   const { register, handleSubmit, reset } = useForm();
 
@@ -28,30 +28,23 @@ const ContactForm = ({ contact }) => {
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
 
+
   const submitContact = async (data) => {
     try {
-      console.log("data---> ", data)
+
       const url = contact ?
-        `${apiUrl}/editContact/${contact._id}` :
+        `${apiUrl}/contact/editContact/${contact._id}` :
         `${apiUrl}/contact/addContact`;
 
-      const response = await axios.post(url, {
-        ...data,
-        socialMedia: {
-          facebook: data.facebook,
-          github: data.github,
-          linkedIn: data.linkedIn
-        }
-      }, {
+      const response = await axios.post(url, data, {
         withCredentials: true
       });
 
-      const { contact } = response.data;
       navigate('/all-contacts');
-      return contact;
+      return 0;
 
     } catch (error) {
-      console.log("Server Error, Adding Contact!!", error);
+      console.log("Error, Adding Contact!!", error);
     }
   };
 

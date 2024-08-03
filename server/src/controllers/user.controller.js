@@ -120,7 +120,6 @@ const loginUser = async (req, res) => {
     const options = {
         httpOnly: true,
         secure: false,
-        expires: new Date(Date.now() + 1 * 60 * 1000)
     }
     
     return res

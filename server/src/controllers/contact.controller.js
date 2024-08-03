@@ -7,7 +7,10 @@ const addContact = async (req, res) => {
     // create a Contact - create entry in db
     // check for contact creation
     // return res
-     
+    const userId = req.user?.id;
+    if (!userId) {
+        return res.status(401).send("Unauthorized");
+    }
     const {name, email, phone, address, relationShip, company, notes, isFavorite, socialMedia} = req.body
 
     if (
@@ -16,7 +19,7 @@ const addContact = async (req, res) => {
         return res.status(400).send("Please enter Name & PhoneNo.")
     }
 
-    const existingContact = await Contact.findOne({phone})
+    const existingContact = await Contact.findOne({userId, phone})
     
 
     if(existingContact){
@@ -28,9 +31,9 @@ const addContact = async (req, res) => {
             name, email, phone, 
             address, relationShip,
             company, notes, isFavorite, 
-            socialMedia
+            socialMedia, userId
         })
-        console.log("In try Block")
+
         const createdContact = await Contact.findById(contact._id)
 
         return res.status(200).json({
@@ -44,8 +47,12 @@ const addContact = async (req, res) => {
 }
 
 const getAllContacts = async(req, res) => {
+    const userId = req.user?.id;
+    if (!userId) {
+        return res.status(401).send("Unauthorized");
+    }
     try {
-        const contacts = await Contact.find({}) 
+        const contacts = await Contact.find({userId}) 
         return res.status(200).json({
             contacts
         })
@@ -55,9 +62,13 @@ const getAllContacts = async(req, res) => {
 }
 
 const getContact = async (req, res) => {
+    const userId = req.user?.id;
+    if (!userId) {
+        return res.status(401).send("Unauthorized");
+    }
     try {
         const { id } = req.params
-        const contact = await Contact.findById(id)
+        const contact = await Contact.findOne({_id: id, userId})
         if (!contact) {
             return res.status(404).send("Contact Not Found");
         }
@@ -71,10 +82,15 @@ const getContact = async (req, res) => {
 
 const editContact = async (req, res) => {
     const {name, email, phone, address, relationShip, company, notes, isFavorite, socialMedia} = req.body
+    const userId = req.user?.id;
+    if (!userId) {
+        return res.status(401).send("Unauthorized");
+    }
     try {
+
         const { id } = req.params
-        Contact.findByIdAndUpdate(
-            id, 
+        const contact = await Contact.findOneAndUpdate(
+            {_id: id, userId},
             {
                 $set: {
                     name, email, phone, 
@@ -85,13 +101,43 @@ const editContact = async (req, res) => {
             },
             { new: true }
         )
+        if (!contact) {
+            return res.status(400).send("Cannot find the Contact!!")
+        }
+        return res.status(200).json({
+            contact
+        })
     } catch (error) {
         return res.status(500).send("Server Error Editing Contact Details")
     }
 }
+
+const deleteContact = async (req, res) => {
+
+    const { id } = req.params;
+    const userId = req.user?.id;
+    if (!userId) {
+        return res.status(401).send("Unauthorized");
+    }
+    try {
+
+        const result = await Contact.deleteOne({ _id: id, userId});
+
+        if (result.deletedCount === 0) {
+            return res.status(404).send("Contact not found");
+        }
+
+        return res.status(200).send("Contact Deleted Successfully");
+    } catch (error) {
+        console.error("Error deleting contact:", error);
+        return res.status(500).send("Server Error, Deleting Contact");
+    }
+};
+
 export {
     addContact,
     getAllContacts,
     getContact,
-    editContact
+    editContact,
+    deleteContact
 }

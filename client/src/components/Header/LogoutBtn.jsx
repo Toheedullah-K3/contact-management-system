@@ -11,14 +11,14 @@ function LogoutBtn() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const logoutHandler = async() => {
     try {
-      await axios.post(`${apiUrl}/user/logout`, {} , {
+      await axios.post(`http://localhost:4000/user/logout`, {} , {
         withCredentials: true
       })
   
       console.log("User Logout Successfully.") 
       dispatch(logout())
     } catch (error) {
-      console.log("Logout Error")
+      console.log("Logout Error", error)
     }
 }
   return (

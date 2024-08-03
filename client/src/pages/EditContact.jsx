@@ -10,18 +10,19 @@ const EditContact = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
 
     const getContact = async () => {
-        const response = await axios.get(`${apiUrl}/contact/getContact/${id}`)
+        const response = await axios.get(`${apiUrl}/contact/getContact/${id}`, {
+          withCredentials: true
+        })
 
-        console.log(response)
         const { contact } = response.data
-        console.log("Edit Contact Runn")
-        console.log(contact.name)
+
         setCurrentContact(contact)
+
     }
 
     useEffect( () => {
         getContact()
-    }, [])
+    }, [id])
   return (
     <div>
       <ContactForm contact={currentContact}/>
