@@ -102,7 +102,12 @@ const ContactCard = ({ viewMode = 'grid', contactData, onDelete }) => {
                             className="bg-white p-4 rounded-lg shadow-sm border border-gray-300 flex justify-between items-center transition-transform duration-300 ease-in-out hover:shadow-lg hover:-translate-y-2"
                         >
                             <div className="flex flex-col">
-                                <span className="text-lg font-medium text-gray-800">{contact.name}</span>
+                                <span 
+                                    className="text-lg font-medium text-gray-800 hover:text-green-700 duration-300 hover:underline cursor-pointer"
+                                    onClick={() => handleCardClick(contact)}
+                                >
+                                        {contact.name}
+                                </span>
                                 <span className="text-gray-600">{contact.phone}</span>
                             </div>
                             <div className="flex flex-col text-right">
