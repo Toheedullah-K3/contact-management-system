@@ -19,12 +19,12 @@ const addContact = async (req, res) => {
         return res.status(400).send("Please enter Name & PhoneNo.")
     }
 
-    const existingContact = await Contact.findOne({userId, phone})
+    // const existingContact = await Contact.findOne({userId, phone})
     
 
-    if(existingContact){
-        return res.status(400).send("This Contact is Already Saved!")
-    }
+    // if(existingContact){
+    //     return res.status(400).send("This Contact is Already Saved!")
+    // }
 
     try {
         const contact = await Contact.create({

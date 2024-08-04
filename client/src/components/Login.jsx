@@ -22,10 +22,11 @@ const Login = () => {
                 withCredentials: true
             })
             const { user } = response.data;
+            const userData = user
 
             if (response.status === 200) {
 
-                dispatch(loginAction({user}))
+                dispatch(loginAction({userData}))
             }
 
             navigate("/")

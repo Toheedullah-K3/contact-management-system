@@ -3,6 +3,7 @@ import { LogoutBtn, Container } from '../index.js'
 import '../../assets/styles/style.css';
 import { useSelector } from 'react-redux'
 import { NavLink, useNavigate } from 'react-router-dom'
+import { FaUserCircle } from 'react-icons/fa'
 
 
 const Navbar = () => {
@@ -62,13 +63,25 @@ const Navbar = () => {
           )
         ))
       }
-      {
-        authStatus && (
-          <li>
-            <LogoutBtn />
-          </li>
-        )
-      }
+      {authStatus && (
+                        <>
+                            <li>
+                                <NavLink to="/profile">
+                                    <button
+                                        className="relative flex items-center justify-center text-gray-900 bg-gray-100 rounded-full overflow-hidden transition-all duration-300 hover:bg-gray-200 hover:w-[60px] w-[50px] h-[50px] flex-shrink-0 focus:outline-none"
+                                    >
+                                        <span className="absolute inset-0 bg-gray-200 opacity-30 group-hover:opacity-40 transition-opacity duration-300"></span>
+                                        <div className="relative z-10 flex items-center justify-center">
+                                            <FaUserCircle className="w-6 h-6 text-gray-900" />
+                                        </div>
+                                    </button>
+                                </NavLink>
+                            </li>
+                            <li>
+                                <LogoutBtn />
+                            </li>
+                        </>
+                    )}
     </ul>
   </div>
 </nav>
