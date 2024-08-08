@@ -28,7 +28,7 @@ const UserProfile = () => {
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
         <div className="flex flex-col items-center mb-4">
           <img
-            src={userData.profilePicture || 'https://via.placeholder.com/150'}
+            src={userData.avatar || 'https://via.placeholder.com/150'}
             alt={`${userData.username}'s profile`}
             className="w-32 h-32 rounded-full mb-4"
           />

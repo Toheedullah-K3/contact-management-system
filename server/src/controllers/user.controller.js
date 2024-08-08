@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken"
+import { uploadOnCloudinary } from "../utils/cloudinary.js"
 
 const generateAccessAndRefereshTokens = async (userId) => {
     try {
@@ -23,6 +24,8 @@ const generateAccessAndRefereshTokens = async (userId) => {
     }
 }
 
+
+
 const registerUser = async (req, res) => {
     // get user details from frontend
     // validate - not empty
@@ -32,15 +35,22 @@ const registerUser = async (req, res) => {
     // check for user creation
     // return res
 
-    const { username, email, password } = req.body;
+
+
+    const { username, email, password, fullname, phone, address, about } = req.body;
 
     if(
-        [username, email, password].some((field) => field?.trim() === "")
+        [username, email, password, fullname].some((field) => field?.trim() === "")
     ) {
         return res.status(400).json({
             error: "These Fields cannot be empty !!!"
         })
     }
+
+    console.log(req.file)
+    const localFilePath = req.file?.path;
+
+    const avatar = await uploadOnCloudinary(localFilePath)
 
     const existingUser = await User.findOne({
         $or: [{username}, {email}]
@@ -48,7 +58,7 @@ const registerUser = async (req, res) => {
 
     if(existingUser){
         return res.status(400).json({
-            error: "User exist krta hai !!!"
+            error: "User Already Exists !!!"
         })
     }
     
@@ -56,12 +66,18 @@ const registerUser = async (req, res) => {
         const user = await User.create({
             username,
             email,
-            password
+            password,
+            fullname,
+            avatar: avatar?.url || "",
+            phone,
+            about,
+            address
         })
 
 
         const createdUser = await User.findById(user._id)
 
+        console.log(createdUser)
         return res.status(201).json({
             createdUser
         })
@@ -116,6 +132,7 @@ const loginUser = async (req, res) => {
     const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(user._id)
     console.log("accessToken ---> ", accessToken)
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
+
 
     const options = {
         httpOnly: true,

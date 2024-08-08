@@ -9,14 +9,30 @@ const userSchema = new Schema(
             required: true,
             unique: true
         },
+        fullname: {
+            type: String,
+            required: true,
+        },
         email: {
             type: String,
             required: true,
             unique: true
         },
+        phone: {
+            type: String,
+        },
+        avatar: {
+            type: String,
+        },
         password: {
             type: String,
             required: true,
+        },
+        about: {
+            type: String,
+        },
+        address: {
+            type: String, 
         },
         refreshToken: {
             type: String

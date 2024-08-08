@@ -23,7 +23,7 @@ const Login = () => {
             })
             const { user } = response.data;
             const userData = user
-
+            console.log(userData)
             if (response.status === 200) {
 
                 dispatch(loginAction({userData}))

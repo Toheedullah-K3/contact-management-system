@@ -8,6 +8,7 @@ import Signup from "./Signup";
 import ContactForm from "./ContactForm";
 import Select from "./Select";
 import ContactCard from "./ContactCard";
+import CustomFileInput from "./customFileInput";
 
 export {
     Navbar,
@@ -19,5 +20,6 @@ export {
     Signup,
     ContactForm,
     Select,
-    ContactCard
+    ContactCard,
+    CustomFileInput
 }

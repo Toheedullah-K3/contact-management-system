@@ -1,32 +1,33 @@
 import { v2 as cloudinary } from 'cloudinary';
-import fs from "fs"
+import fs from "fs";
 
 cloudinary.config({ 
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
-    api_key: process.env.CLOUDINARY_CLOUD_API, 
-    api_secret: process.env.CLOUDINARY_CLOUD_SECRET
+    cloud_name: 'toheedxdev', 
+    api_key: '933661945493736', 
+    api_secret: 'FP8ogHHZK8HpwqImQZvScRP2zHA'
 });
 
 const uploadOnCloudinary = async (localFilePath) => {
     try {
-        if(!localFilePath) return null
+        if (!localFilePath) return null;
+        
         // upload file on cloudinary
-        const response = cloudinary.uploader.upload(localFilePath,{
+        const response = await cloudinary.uploader.upload(localFilePath, {
             resource_type: "auto"
-        })
+        });
 
+        console.log("Try Block Run");
         // file has been uploaded successfully
-        console.log("File is uploaded on Cloudinary", response)
+        console.log("File is uploaded on Cloudinary", response);
 
-        return response
+        return response;
     } catch (error) {
-        fs.unlinkSync(localFilePath) // if cloudinary failed then our local saved 
-                                    // temporary file will be remove
-        return null
+        console.log("Catch Block Run", error);
+        fs.unlinkSync(localFilePath); // if cloudinary failed then our local saved temporary file will be removed
+        return null;
     }
-}
-
+};
 
 export {
-    uploadOnCloudinay
-}
+    uploadOnCloudinary
+};
