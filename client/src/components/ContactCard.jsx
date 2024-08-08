@@ -27,6 +27,8 @@ const ContactCard = ({ viewMode = 'grid', contactData, onDelete }) => {
         setShowEditOption(showEditOption === contactId ? null : contactId);
     };
 
+    console.log("ContactData --> ", contactData)
+
     return (
         <div>
             {viewMode === 'grid' ? (
@@ -64,7 +66,7 @@ const ContactCard = ({ viewMode = 'grid', contactData, onDelete }) => {
                             <div className="flex flex-col items-center">
                                 <div className="bg-gray-200 p-3 rounded-full mb-4">
                                     <img
-                                        src={contact.avatar || defaultAvatar}
+                                        src={contact.contactAvatar || defaultAvatar}
                                         alt={contact.name}
                                         className="w-16 h-16 object-cover rounded-full"
                                     />

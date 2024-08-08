@@ -1,13 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Input, Button, Select } from './index.js';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const ContactForm = ( {contact} ) => {
+const ContactForm = ({ contact }) => {
 
   const { register, handleSubmit, reset } = useForm();
+  const [avatarPreview, setAvatarPreview] = useState(null)
+  const [fileInputKey, setFileInputKey] = useState(Date.now());
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     reset({
@@ -30,13 +33,22 @@ const ContactForm = ( {contact} ) => {
 
 
   const submitContact = async (data) => {
+    setLoading(true)
+    const formData = new FormData();
+    for (const key in data) {
+      formData.append(key, data[key]);
+    }
+    if (data.contactAvatar[0]) {
+      formData.append("contactAvatar", data.contactAvatar[0]);
+    }
+
     try {
 
       const url = contact ?
         `${apiUrl}/contact/editContact/${contact._id}` :
         `${apiUrl}/contact/addContact`;
 
-      const response = await axios.post(url, data, {
+      const response = await axios.post(url, formData, {
         withCredentials: true
       });
 
@@ -45,13 +57,36 @@ const ContactForm = ( {contact} ) => {
 
     } catch (error) {
       console.log("Error, Adding Contact!!", error);
+    } finally {
+      setLoading(false)
     }
   };
 
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setAvatarPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleRemoveAvatar = () => {
+    setAvatarPreview(null);
+    setValue("avatar", null);
+    setFileInputKey(Date.now());
+  };
+
+
   const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 via-purple-50 to-blue-100 py-12 px-4 sm:px-6 lg:px-8">
+      {loading && (
+        <div className="loader-overlay">
+
+          <div className="loader text-blue-500"></div>
+        </div>
+      )}
       {isMobile ? (
         <div className="p-4 bg-white rounded-lg shadow-md">
           <h2 className="text-2xl font-bold text-gray-900 text-center mb-5">
@@ -203,11 +238,60 @@ const ContactForm = ( {contact} ) => {
               <h2 className="text-2xl font-bold text-gray-900">Manage Your Contacts</h2>
               <p className="text-gray-600">Keep track of all your important contacts in one place.</p>
               <p className="text-gray-600">Easily add, edit, and delete contacts as needed.</p>
-              <img
-                src="https://via.placeholder.com/150"
-                alt="Illustration"
-                className="w-32 h-32 object-cover mx-auto rounded-lg shadow-md"
-              />
+              <div className="flex flex-col items-center">
+                <label
+                  htmlFor="contactAvatar"
+                  className="cursor-pointer flex flex-col items-center justify-center w-32 h-32 bg-gray-200 rounded-xl border-2 border-gray-300 hover:bg-gray-300 transition-all duration-200 relative group"
+                >
+
+                  {avatarPreview ? (
+                    <>
+                      <img
+                        src={avatarPreview}
+                        alt="Avatar Preview"
+                        className="w-full h-full rounded-xl object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); handleRemoveAvatar(); }}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                      >
+                        &times;
+                      </button>
+                    </>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center h-full">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-12 w-12 text-gray-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 4v16m8-8H4"
+                        />
+                      </svg>
+                      <span className="text-gray-500">Upload Avatar</span>
+                    </div>
+                  )}
+
+                  <input
+                    key={fileInputKey}
+                    id="contactAvatar"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    {...register("contactAvatar", {
+                      onChange: handleAvatarChange,
+                    })}
+                  />
+                </label>
+              </div>
+
               <div className="mt-6">
                 <div className="mt-4">
                   <h3 className="text-lg font-semibold text-gray-800">Social Media Links</h3>

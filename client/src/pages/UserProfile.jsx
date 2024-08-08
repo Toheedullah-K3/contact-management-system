@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { IoMdContact } from "react-icons/io";
 
 const UserProfile = () => {
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
-//   const [isLoading, setIsLoading] = useState(true);
+
 
   useEffect(() => {
     if (!userData) {
       navigate("/login");
-    } else {
-    //   setIsLoading(false);
     }
   }, [userData, navigate]);
 
-//   if (isLoading) {
-//     return <h1 className="text-5xl flex justify-center">Loading...</h1>;
-//   }
 
   if (!userData) {
     return <h1 className="text-5xl flex justify-center">Please Login to see this Page</h1>;
@@ -27,11 +23,17 @@ const UserProfile = () => {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-12">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
         <div className="flex flex-col items-center mb-4">
-          <img
-            src={userData.avatar || 'https://via.placeholder.com/150'}
-            alt={`${userData.username}'s profile`}
-            className="w-32 h-32 rounded-full mb-4"
-          />
+          {userData.avatar ? (
+            <img
+              src={userData.avatar}
+              alt={`${userData.username}'s profile`}
+              className="w-32 h-32 rounded-full mb-4 bg-cover"
+            />
+          ) : (
+            <IoMdContact className='w-32 h-32 bg-slate-900 text-white rounded-full mb-4' />
+          )}
+
+
           <h1 className="text-4xl font-bold mb-2">{userData.username}</h1>
           <p className="text-xl text-gray-600">{userData.fullname || "N/A"}</p>
         </div>

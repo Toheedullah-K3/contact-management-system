@@ -72,7 +72,14 @@ const ContactsPage = () => {
                           </h1>
 
   return (
+    
     <div className="min-h-screen bg-gradient-to-r from-blue-100 via-purple-50 to-blue-100 p-8">
+      {deleteLoading && (
+          <div className="spinner-container">
+            <div className="spinner"></div>
+            <p className="text-center text-gray-600 mt-2">Deleting...</p>
+          </div>
+        )}
       <div className="max-w-5xl mx-auto bg-white p-12 rounded-2xl shadow-xl border border-gray-200 bg-opacity-90">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-semibold text-gray-800">Contacts</h1>
@@ -98,12 +105,7 @@ const ContactsPage = () => {
           onDelete={handleContactDeleted} 
         />
         
-        {deleteLoading && (
-          <div className="spinner-container">
-            <div className="spinner"></div>
-            <p className="text-center text-gray-600 mt-2">Deleting...</p>
-          </div>
-        )}
+        
       </div>
     </div>
   );

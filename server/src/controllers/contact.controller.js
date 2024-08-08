@@ -1,4 +1,5 @@
 import { Contact } from "../models/contact.model.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const addContact = async (req, res) => {
     // get Contact Details from User
@@ -11,7 +12,7 @@ const addContact = async (req, res) => {
     if (!userId) {
         return res.status(401).send("Unauthorized");
     }
-    const {name, email, phone, address, relationShip, company, notes, isFavorite, socialMedia} = req.body
+    const { name, email, phone, address, relationShip, company, notes, isFavorite, socialMedia } = req.body
 
     if (
         [name, phone].some((field) => field?.trim() === "")
@@ -20,22 +21,27 @@ const addContact = async (req, res) => {
     }
 
     // const existingContact = await Contact.findOne({userId, phone})
-    
+
 
     // if(existingContact){
     //     return res.status(400).send("This Contact is Already Saved!")
     // }
+    console.log(req.file)
+    const localFilePath = req.file?.path;
+    const contactAvatar = await uploadOnCloudinary(localFilePath)
 
     try {
         const contact = await Contact.create({
-            name, email, phone, 
+            name, email, phone,
             address, relationShip,
-            company, notes, isFavorite, 
+            contactAvatar: contactAvatar?.url || "", 
+            company, notes, isFavorite,
             socialMedia, userId
         })
 
         const createdContact = await Contact.findById(contact._id)
 
+        // console.log(createdContact)
         return res.status(200).json({
             createdContact
         })
@@ -46,13 +52,13 @@ const addContact = async (req, res) => {
     }
 }
 
-const getAllContacts = async(req, res) => {
+const getAllContacts = async (req, res) => {
     const userId = req.user?.id;
     if (!userId) {
         return res.status(401).send("Unauthorized");
     }
     try {
-        const contacts = await Contact.find({userId}) 
+        const contacts = await Contact.find({ userId })
         return res.status(200).json({
             contacts
         })
@@ -68,7 +74,7 @@ const getContact = async (req, res) => {
     }
     try {
         const { id } = req.params
-        const contact = await Contact.findOne({_id: id, userId})
+        const contact = await Contact.findOne({ _id: id, userId })
         if (!contact) {
             return res.status(404).send("Contact Not Found");
         }
@@ -81,7 +87,7 @@ const getContact = async (req, res) => {
 }
 
 const editContact = async (req, res) => {
-    const {name, email, phone, address, relationShip, company, notes, isFavorite, socialMedia} = req.body
+    const { name, email, phone, address, relationShip, company, notes, isFavorite, socialMedia } = req.body
     const userId = req.user?.id;
     if (!userId) {
         return res.status(401).send("Unauthorized");
@@ -90,12 +96,12 @@ const editContact = async (req, res) => {
 
         const { id } = req.params
         const contact = await Contact.findOneAndUpdate(
-            {_id: id, userId},
+            { _id: id, userId },
             {
                 $set: {
-                    name, email, phone, 
-                    address, relationShip, 
-                    company, notes, isFavorite, 
+                    name, email, phone,
+                    address, relationShip,
+                    company, notes, isFavorite,
                     socialMedia
                 }
             },
@@ -121,7 +127,7 @@ const deleteContact = async (req, res) => {
     }
     try {
 
-        const result = await Contact.deleteOne({ _id: id, userId});
+        const result = await Contact.deleteOne({ _id: id, userId });
 
         if (result.deletedCount === 0) {
             return res.status(404).send("Contact not found");

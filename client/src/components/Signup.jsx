@@ -47,7 +47,7 @@ const Signup = () => {
     setAvatarPreview(null);
     setValue("avatar", null);
     setFileInputKey(Date.now());
-  };
+  }; 
 
   return (
     <div className='flex items-center justify-center w-full'>

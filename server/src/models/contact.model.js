@@ -20,9 +20,12 @@ const contactSchema = new Schema(
             type: String,
             trim: true
         },
+        contactAvatar: {
+            type: String,
+            trim: true
+        },
         relationShip: {
             type: String,
-            // enum: ['Friend', 'Family', 'Colleague', 'Other'],
             default: "Friend",
             trim: true
         },
