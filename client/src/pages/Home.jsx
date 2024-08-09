@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 const Home = () => {
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center">
@@ -12,9 +12,12 @@ const Home = () => {
           <p className="text-lg text-gray-500 mb-8">
             Effortlessly manage your contacts and stay organized with our user-friendly system.
           </p>
-          <button className="px-8 py-3 bg-blue-500 text-white font-semibold rounded-full shadow-md hover:bg-blue-600 transition duration-300">
-            Get Started
-          </button>
+          <Link to="all-contacts">
+            <button className="px-8 py-3 bg-blue-500 text-white font-semibold rounded-full shadow-md hover:bg-blue-600 transition duration-300">
+              Get Started
+            </button>
+          </Link>
+
         </div>
 
         {/* Right Section */}
