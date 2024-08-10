@@ -8,17 +8,17 @@ const Signup = () => {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const { register, handleSubmit, setValue } = useForm();
-  const apiUrl = import.meta.env.VITE_API_URL;
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [fileInputKey, setFileInputKey] = useState(Date.now());
-
+  
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const createUser = async (data) => {
     const formData = new FormData();
     for (const key in data) {
       formData.append(key, data[key]);
     }
-    if (data.avatar[0]) {
+    if (data.avatar[0]) { 
       formData.append("avatar", data.avatar[0]);
     }
 
@@ -27,6 +27,7 @@ const Signup = () => {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        withCredentials: true,
       });
 
       console.log(response.data);
