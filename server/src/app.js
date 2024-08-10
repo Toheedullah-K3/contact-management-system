@@ -7,7 +7,7 @@ import bodyParser from "body-parser"
 const app = express()
 
 app.use(cors({
-    origin: process.env.CORS_ORIGIN || 'https://dev-contact-management-system.vercel.app',
+    origin: process.env.CORS_ORIGIN || 'https://contact-management-system-nine.vercel.app/',
     credentials: true
 }))
 
