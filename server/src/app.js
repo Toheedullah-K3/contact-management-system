@@ -7,9 +7,10 @@ import bodyParser from "body-parser"
 const app = express()
 
 app.use(cors({
-    origin: process.env.CORS_ORIGIN || 'https://contact-management-system-nine.vercel.app/',
+    origin: process.env.CORS_ORIGIN || 'https://contact-management-system-nine.vercel.app',
     credentials: true
 }))
+
 
 app.use(express.json({limit: "16kb"}))
 app.use(express.urlencoded({extended: true, limit: "16kb"}))
