@@ -7,7 +7,7 @@ import bodyParser from "body-parser"
 const app = express()
 
 app.use(cors({
-    origin: 'https://dev-contact-management-system-ermtq48hx.vercel.app/',
+    origin: 'https://contact-management-system-nine.vercel.app',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization']
