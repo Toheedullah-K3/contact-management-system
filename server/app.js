@@ -8,7 +8,6 @@ const app = express()
 
 app.use(cors({
     // origin: "http://localhost:5173",
-    // origin: ['https://contact-management-system-nine.vercel.app', 'localhost'],
     origin: 'https://contact-management-system-nine.vercel.app/',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],

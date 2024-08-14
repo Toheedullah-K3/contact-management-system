@@ -1,7 +1,5 @@
-
 {
     "version": 2,
-    "name": "contact-management-system",
     "builds": [
         {
             "src": "index.js",
@@ -11,7 +9,19 @@
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "./src/index.js"
+            "dest": "index.js",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE",
+                "OPTIONS"
+            ],
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS"
+            }
         }
     ]
 }

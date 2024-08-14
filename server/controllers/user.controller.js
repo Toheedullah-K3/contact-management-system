@@ -47,7 +47,6 @@ const registerUser = async (req, res) => {
         })
     }
 
-    console.log(req.file)
     const localFilePath = req.file?.path;
 
     const avatar = await uploadOnCloudinary(localFilePath)
