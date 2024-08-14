@@ -135,7 +135,8 @@ const loginUser = async (req, res) => {
 
     const options = {
         httpOnly: true,
-        secure: false,
+        secure: true,
+        sameSite: 'None'
     }
     
     return res
@@ -166,7 +167,8 @@ const logoutUser = async (req, res) => {
 
     const options = {
         httpOnly: true,
-        secure: false
+        secure: true,
+        sameSite: 'None'
     }
 
     return res
@@ -211,7 +213,8 @@ const refreshAccessToken = async (req, res) => {
 
         const options = {
             httpOnly: true,
-            secure: false // just for thunderclient
+            secure: true, 
+            sameSite: 'None'
         }
         return res
         .status(200)
