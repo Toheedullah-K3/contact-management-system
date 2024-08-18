@@ -286,7 +286,9 @@ const ContactForm = ({ contact }) => {
                     accept="image/*"
                     className="hidden"
                     {...register("contactAvatar", {
-                      onChange: handleAvatarChange,
+                      onChange: (e) => {
+                        handleAvatarChange(e);
+                      },
                     })}
                   />
                 </label>
